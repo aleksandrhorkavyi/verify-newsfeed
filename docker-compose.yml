@@ -1,0 +1,58 @@
+version: '3.9'
+
+services:
+  db_master:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: newsfeed
+      POSTGRES_PASSWORD: newsfeed
+    volumes:
+      - ./.data/master/data:/var/lib/postgresql/data
+      - ./.data/master/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    restart: always
+
+  db_slave:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: newsfeed_slave
+      POSTGRES_PASSWORD: newsfeed_slave
+      POSTGRES_MASTER_HOST: master
+      POSTGRES_MASTER_PORT: 5432
+    volumes:
+      - ./.data/slave/data:/var/lib/postgresql/data
+    restart: always
+
+  elasticsearch:
+    image: elasticsearch:8.2.2
+    environment:
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - xpack.security.enabled=false
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - target: 9200
+        published: 9200
+    networks:
+      - elastic
+
+  kibana:
+    image: kibana:8.2.2
+    ports:
+      - target: 5601
+        published: 5601
+    depends_on:
+      - elasticsearch
+    networks:
+      - elastic
+
+volumes:
+  es_data:
+    driver: local
+
+networks:
+  elastic:
+    name: elastic
+    driver: bridge
