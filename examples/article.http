@@ -1,5 +1,5 @@
 ###
-GET localhost:8080/articles
+GET localhost:3000/articles
 
 ###
 GET localhost:8080/articles/34

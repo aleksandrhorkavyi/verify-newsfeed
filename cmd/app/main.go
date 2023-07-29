@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/aleksandrhorkavyi/verify-newsfeed/internal/article"
-	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
@@ -14,12 +13,6 @@ func main() {
 	_ = DB()
 	r := gin.Default()
 
-	es, err := elasticsearch.NewClient(elasticsearch.Config{})
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Info(es.Info())
-
 	var (
 		articleRepo = article.NewRepository()
 		articleSvc  = article.NewService(articleRepo)
@@ -27,7 +20,7 @@ func main() {
 
 	article.NewController(r, articleSvc).InitRoutes()
 
-	if err := r.Run(":8080"); err != nil {
+	if err := r.Run(); err != nil {
 		log.Fatal(err)
 	}
 }
