@@ -15,21 +15,19 @@ func NewController(g *gin.Engine, svc Service) *Controller {
 }
 
 func (c *Controller) InitRoutes() {
-	c.gin.GET("/articles", c.all)
 	c.gin.GET("/articles/:id", c.one)
-
+	c.gin.GET("/do-something", c.all)
 }
 
-func (e *Controller) all(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "ok",
-	})
+func (c *Controller) all(ctx *gin.Context) {
+
+	ctx.JSON(http.StatusOK, c.svc.DoSomething())
 }
 
-func (e *Controller) one(c *gin.Context) {
-	id := c.Param("id")
+func (c *Controller) one(ctx *gin.Context) {
+	id := ctx.Param("id")
 
-	c.JSON(http.StatusOK, gin.H{
+	ctx.JSON(http.StatusOK, gin.H{
 		"id": id,
 	})
 }

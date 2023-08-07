@@ -1,0 +1,18 @@
+###
+
+POST localhost:9200/_analyze
+Content-Type: application/json
+
+{
+  "text": "Я маленький Гвинтік.",
+  "char_filter": {
+    "type": "mapping",
+    "mappings": [
+      "Я => ''"
+    ]
+  },
+  "tokenizer": "standard",
+  "filter": [
+    "uppercase"
+  ]
+}

@@ -1,0 +1,40 @@
+###
+# Creating an index
+PUT localhost:9200/user
+
+###
+# Delete
+DELETE localhost:9200/twitter
+
+###
+# Create Index with mapping
+PUT localhost:9200/test_sooqa
+Content-Type: application/json
+
+{
+  "mappings": {
+    "properties": {
+      "some_name":   { "type": "keyword" }
+    }
+  }
+}
+
+###
+# Creating an index with shards and replicas
+PUT localhost:9200/twitter
+Content-Type: application/json
+
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0
+  }
+}
+
+
+###
+GET localhost:9200/_cat/indices/
+
+###
+POST localhost:9200/my_index/_doc
+

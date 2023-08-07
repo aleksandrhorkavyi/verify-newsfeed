@@ -1,0 +1,9 @@
+{
+  "query": {
+    "match": {
+      "short": "Some"
+    }
+  },
+  "from": 1,
+  "size": 2
+}

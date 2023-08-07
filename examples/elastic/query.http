@@ -1,0 +1,17 @@
+###
+# Create doc with id 34. Sending without 34 creates random index.
+
+
+###
+GET localhost:9200/my_index/_search
+Content-Type: application/json
+
+{
+  "query": {
+    "match": {
+      "short": "Some"
+    }
+  },
+  "from": 1,
+  "size": 2
+}

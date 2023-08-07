@@ -1,7 +1,7 @@
 package article
 
 type Service interface {
-	All() []*Article
+	DoSomething() map[string]any
 }
 
 type service struct {
@@ -12,6 +12,6 @@ func NewService(repo Repository) Service {
 	return &service{repo: repo}
 }
 
-func (s service) All() []*Article {
-	return nil
+func (s service) DoSomething() map[string]any {
+	return s.repo.One()
 }

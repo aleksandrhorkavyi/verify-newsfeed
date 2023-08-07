@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/aleksandrhorkavyi/verify-newsfeed/internal/article"
+	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
@@ -12,9 +13,16 @@ import (
 func main() {
 	_ = DB()
 	r := gin.Default()
+	client, err := elasticsearch.NewTypedClient(elasticsearch.Config{
+		// Proper configuration for your {es} cluster.
+	})
+	if err != nil {
+		log.Fatal(err)
+		fmt.Println("OOPS")
+	}
 
 	var (
-		articleRepo = article.NewRepository()
+		articleRepo = article.NewRepository(client)
 		articleSvc  = article.NewService(articleRepo)
 	)
 
